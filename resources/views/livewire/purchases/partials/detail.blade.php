@@ -9,7 +9,7 @@
                                 <tr>
                                     <th width="10%"></th>
                                     <th class="table-th text-left text-withe">DESCRIPCION</th>
-                                    <th class="table-th text-center text-withe">PRECIO</th>
+                                    <th width="13%" class="table-th text-center text-withe">PRECIO</th>
                                     <th width="13%" class="table-th text-center text-withe">CANT</th>
                                     <th class="table-th text-center text-withe">IMPORTE</th>
                                     <th class="table-th text-center text-withe">ACTIONS</th>
@@ -31,12 +31,19 @@
                                             @endif
                                         </td>
                                         <td><h6>{{$item->name}}</h6></td>
-                                        <td class="text-center">Bs{{number_format($item->price,2)}}</td>
+                                        <td class="text-center">
+                                            <input 
+                                            type="number" 
+                                            id="p{{$item->id}}"
+                                            style="font-size: 1rem!important"
+                                            class="form-control text-center"
+                                            value="{{$item->price}}">
+                                        </td>
                                         <td>
                                             <input 
                                             type="number" 
                                             id="r{{$item->id}}"
-                                            wire:change="updateQty({{$item->id}}, $('#r' + {{$item->id}}).val() )"
+                                            wire:change="updateQty({{$item->id}},$('#p' + {{$item->id}}).val() ,$('#r' + {{$item->id}}).val() )"
                                             style="font-size: 1rem!important"
                                             class="form-control text-center"
                                             value="{{$item->quantity}}">
@@ -53,7 +60,7 @@
                                             <button wire:click.prevent="decreaseQty({{$item->id}})" class="btn btn-dark mbmobile">
                                                 <i class="fas fa-minus"></i>
                                             </button>
-                                            <button wire:click.prevent="increaseQty({{$item->id}})" class="btn btn-dark mbmobile">
+                                            <button wire:click.prevent="increaseQty({{$item->id}},$('#p' + {{$item->id}}).val())" class="btn btn-dark mbmobile">
                                                 <i class="fas fa-plus"></i>
                                             </button>
                                         </td>

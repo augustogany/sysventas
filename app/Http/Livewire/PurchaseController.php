@@ -59,7 +59,7 @@ class PurchaseController extends Component
                 return;
             }
 
-            Cart::add($product->id, $product->name,$product->price, $cant, $product->image);
+            Cart::add($product->id, $product->name,1, $cant, $product->image);
             $this->total = Cart::getTotal();
           
             $this->emit('scan-ok','Producto agregado');
@@ -71,7 +71,7 @@ class PurchaseController extends Component
         return $exist ? true : false;
     }
 
-    public function increaseQty($productId,$cant = 1){
+    public function increaseQty($productId,$price,$cant = 1){
         $title = '';
         $product = Product::findOrFail($productId);
         $exist = Cart::get($productId);
@@ -82,12 +82,12 @@ class PurchaseController extends Component
             $title = 'Producto agregado';
         }
 
-        Cart::add($product->id, $product->name, $product->price, $cant, $product->image);
+        Cart::add($product->id, $product->name, $price, $cant, $product->image);
         $this->total = Cart::getTotal();
         $this->emit('scan-ok', $title);
     }
 
-    public function updateQty($productId, $cant = 1){
+    public function updateQty($productId,$price, $cant = 1){
         $product = Product::findOrFail($productId);
         $exist = Cart::get($productId);
 
@@ -99,7 +99,7 @@ class PurchaseController extends Component
        
         $this->removeItem($productId);
         if ($cant > 0) {
-            Cart::add($product->id, $product->name, $product->price, $cant, $product->image);
+            Cart::add($product->id, $product->name, $price, $cant, $product->image);
             $this->total = Cart::getTotal();
             $this->emit('scan-ok', $title);
         }
