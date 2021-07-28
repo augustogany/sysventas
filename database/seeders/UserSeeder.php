@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             'phone' => 69658908
         ]);
 
-        User::create([
+        $admin = User::create([
             'name' => 'Augusto Carvalho',
             'phone' => 69658908,
             'profile' => 'ADMIN',
@@ -29,14 +29,18 @@ class UserSeeder extends Seeder
             'email' => 'auguss24@gmail.com',
             'password' => Hash::make('password')
         ]);
+        
+        $admin->assignRole('Admin');
 
-        User::create([
-            'name' => 'Mariana Elba',
+        $manager = User::create([
+            'name' => 'Erick Fernando',
             'phone' => 76885027,
             'profile' => 'EMPLOYEE',
             'status' => 'ACTIVE',
-            'email' => 'mari@gmail.com',
+            'email' => 'erick@gmail.com',
             'password' => Hash::make('password')
         ]);
+
+        $manager->assignRole('Manager');
     }
 }

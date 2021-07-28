@@ -75,7 +75,7 @@ class ProductController extends Component
             'name' => $this->name,
             'cost' => $this->cost,
             'price' => $this->price,
-            'barcode' => $this->barcode,
+            //'barcode' => $this->barcode,
             'stock' => $this->stock,
             'alerts' => $this->alerts,
             'category_id' => $this->categoryid
@@ -88,6 +88,10 @@ class ProductController extends Component
             $product->image = $customFileName;
             $product->save();
         }
+        
+        $product->barcode = date('Ymd').str_pad($product->id, 5, "0", STR_PAD_LEFT);
+        $product->save();
+
         $this->resetUI();
         $this->emit('product-added','Producto Registrado');
     }

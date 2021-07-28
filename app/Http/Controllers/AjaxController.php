@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Contact;
+use App\Models\Product;
 use Luecano\NumeroALetras\NumeroALetras;
 use DB;
 
@@ -49,19 +50,9 @@ class AjaxController extends Controller
         return response()->json($customers);
     }
 
-    public function imprimir($id){
-        $certificado = DB::table('certificates as cer')
-            ->join('personas as per', 'cer.persona_id', '=', 'per.id')
-            ->join('departamentos as dep', 'per.departamento_id', '=', 'dep.id')
-            ->select([
-                'cer.id','cer.codigo','cer.type','cer.price', 'per.full_name', 'per.ci','dep.sigla',
-                'cer.descripcion','cer.deuda','cer.monto_deuda','per.alfanum',
-                DB::raw("DATE_FORMAT(cer.created_at, '%d/%m/%Y') as fecha"),
-                DB::raw("DATE_FORMAT(cer.created_at, '%H:%i:%S') as hora")
-            ])
-            ->where('cer.id',$id)
-            ->first();
-            $monto_literal = (new NumeroALetras())->toInvoice($certificado->deuda, 2, 'BOLIVIANOS', 'CENTAVOS');
-        return view('livewire.certificates.certif', compact('certificado','monto_literal'));
+    public function print_bar_code(Request $request){
+        $productos = Product::select('id', 'barcode')->whereIn('id', $request->input_print)->get();
+        $cantidad = $request->cantidad ?? 1;
+        return view('inventarios.productos.partials.print_bar_code', compact('productos', 'cantidad'));
     }
 }

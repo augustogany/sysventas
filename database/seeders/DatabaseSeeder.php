@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             DenominationSeeder::class,
             CategorySeeder::class,
             ProductSeeder::class,
+            RolesAndPermissionsSeeder::class,
             UserSeeder::class,
             TypeDocumentSeeder::class
         ]);
