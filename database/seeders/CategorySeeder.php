@@ -15,19 +15,23 @@ class CategorySeeder extends Seeder
     public function run()
     {
         Category::create([
-            'name' => 'CURSOS',
+            'name' => 'VIDRIOS TEMPLADOS',
             'image' => 'https://dummyimage.com/200x150/5c5756/fff'
         ]);
         Category::create([
-            'name' => 'TENIS',
+            'name' => 'CARGADORES',
             'image' => 'https://dummyimage.com/200x150/5c5756/fff'
         ]);
         Category::create([
-            'name' => 'CELULARES',
+            'name' => 'AURICULARES',
             'image' => 'https://dummyimage.com/200x150/5c5756/fff'
         ]);
         Category::create([
-            'name' => 'COMPUTADORAS',
+            'name' => 'CABLES USB',
+            'image' => 'https://dummyimage.com/200x150/5c5756/fff'
+        ]);
+        Category::create([
+            'name' => 'ADAPTADORES',
             'image' => 'https://dummyimage.com/200x150/5c5756/fff'
         ]);
     }

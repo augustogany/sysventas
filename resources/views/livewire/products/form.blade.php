@@ -18,7 +18,7 @@
             @enderror
         </div>
     </div>
-    <div class="col-sm-12 col-md-4">
+    <div class="col-sm-12 col-md-3">
         <div class="form-group">
             <label>Costo</label>
             <input type="text" data-type="currency" wire:model.lazy="cost" class="form-control" placeholder="Ej: 0.00">
@@ -27,7 +27,7 @@
             @enderror
         </div>
     </div>
-    <div class="col-sm-12 col-md-4">
+    <div class="col-sm-12 col-md-3">
         <div class="form-group">
             <label>Precio</label>
             <input type="text" data-type="currency" wire:model.lazy="price" class="form-control" placeholder="Ej: 0.00">
@@ -36,7 +36,7 @@
             @enderror
         </div>
     </div>
-    <div class="col-sm-12 col-md-4">
+    <div class="col-sm-12 col-md-3">
         <div class="form-group">
             <label>Stock</label>
             <input type="number" wire:model.lazy="stock" class="form-control" placeholder="Ej: 0">
@@ -45,16 +45,16 @@
             @enderror
         </div>
     </div>
-    <div class="col-sm-12 col-md-4">
+    <div class="col-sm-12 col-md-3">
         <div class="form-group">
-            <label>Alertas/Cantidad Minima</label>
+            <label>Alertas/Minima</label>
             <input type="number" wire:model.lazy="alerts" class="form-control" placeholder="Ej: 10">
             @error('alerts')
                 <span class="text-danger er">{{ $message}}</span>
             @enderror
         </div>
     </div>
-    <div class="col-sm-12 col-md-4">
+    <div class="col-sm-12 col-md-6">
         <div class="form-group">
             <label>Categoria</label>
             <select wire:model="categoryid" class="form-control">
@@ -64,6 +64,20 @@
                 @endforeach
             </select>
             @error('categoryid')
+                <span class="text-danger er">{{ $message}}</span>
+            @enderror
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6">
+        <div class="form-group">
+            <label>Sub Categoria</label>
+            <select wire:model="subcategoryid" class="form-control">
+                <option value="" disabled>Elegir</option>
+                @foreach ($subcategories as $subcategory)
+                    <option value="{{$subcategory->id}}">{{$subcategory->name}}</option>
+                @endforeach
+            </select>
+            @error('subcategoryid')
                 <span class="text-danger er">{{ $message}}</span>
             @enderror
         </div>

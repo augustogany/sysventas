@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\CategoryController;
+use App\Http\Livewire\SubCategoryController;
 use App\Http\Livewire\ProductController;
 use App\Http\Livewire\CoinController;
 use App\Http\Livewire\PosController;
@@ -13,6 +14,7 @@ use App\Http\Livewire\UsersController;
 use App\Http\Livewire\CashOutController;
 use App\Http\Livewire\ReportsController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\ImportController;
 use App\Http\Controllers\AjaxController;
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +37,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::middleware(['auth'])->group(function () {
     Route::get('categories', CategoryController::class);
+    Route::get('subcategories', SubCategoryController::class);
     Route::get('products', ProductController::class);
     Route::get('coins', CoinController::class);
     Route::get('pos', PosController::class);
@@ -58,3 +61,6 @@ Route::get('report/pdf/{user}/{type}',[ExportController::class,'reportPDF']);
 //reportes Excel
 Route::get('reporte/excel/{user}/{type}/{f1}/{f2}',[ExportController::class,'reportExcel']);
 Route::get('reporte/excel/{user}/{type}',[ExportController::class,'reportExcel']);
+
+//importar Productos
+Route::get('/import', [ImportController::class,'import']);

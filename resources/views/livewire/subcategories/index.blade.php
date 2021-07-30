@@ -20,28 +20,30 @@
                         <thead class="text-white" style="background: #3B3F5C">
                             <tr>
                                 <th class="table-th text-white">DESCRIPCION</th>
+                                <th class="table-th text-white text-center">CATEGORIA</th>
                                 <th class="table-th text-white">IMAGEN</th>
                                 <th class="table-th text-white">ACTIONS</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($categories as $category)
+                            @forelse ($subcategories as $item)
                                 <tr>
-                                    <td><h6>{{$category->name}}</h6></td>
+                                    <td><h6>{{$item->name}}</h6></td>
+                                    <td><h6 class="text-center">{{$item->category}}</h6></td>
                                     <td class="text-center">
                                         <span>
-                                            <img src="{{ asset('storage/categories/'.$category->imagen)}}" alt="imagen de ejemplo" height="70" width="80" class="rounded">
+                                            <img src="{{ asset('storage/categories/'.$item->imagen)}}" alt="imagen de ejemplo" height="70" width="80" class="rounded">
                                         </span>
                                     </td>
                                     <td class="text-center">
                                         <a href="javascript:void(0)" 
-                                        wire:click="Edit({{$category->id}})"
+                                        wire:click="Edit({{$item->id}})"
                                         class="btn btn-dark mtmobile" 
                                         title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <a href="javascript:void(0)" 
-                                        onclick="Confirm('{{$category->id}}')"
+                                        onclick="Confirm('{{$item->id}}')"
                                         class="btn btn-dark" 
                                         title="Delete">
                                             <i class="fas fa-trash"></i>
@@ -55,12 +57,12 @@
                             @endforelse
                         </tbody>
                     </table>
-                   {{ $categories->links() }}
+                   {{ $subcategories->links() }}
                 </div>
             </div>
         </div>
     </div>
-    @include('livewire.category.form')
+    @include('livewire.subcategories.form')
 </div>
 
 <script>
@@ -69,17 +71,17 @@
             $('#theModal').modal('show')
         });
 
-        window.livewire.on('category-added', Msg => {
+        window.livewire.on('subcategory-added', Msg => {
             $('#theModal').modal('hide')
             noty(Msg)
         });
 
-        window.livewire.on('category-updated', Msg => {
+        window.livewire.on('subcategory-updated', Msg => {
             $('#theModal').modal('hide')
             noty(Msg)
         });
 
-        window.livewire.on('category-deleted', Msg => {
+        window.livewire.on('subcategory-deleted', Msg => {
             noty(Msg)
         });
 

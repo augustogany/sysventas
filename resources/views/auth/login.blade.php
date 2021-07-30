@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="form-content">
-    <h1 class="">Login en <a href="/"><span class="brand-name">SYSDOCS</span></a></h1>
+    <h1 class="">Login en <a href="/"><span class="brand-name">{{env('APP_NAME','LARAVEL')}}</span></a></h1>
     <form class="text-left" action="{{ route('login') }}" method="post">
         @csrf
         <div class="form">

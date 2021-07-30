@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\SubCategory;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Storage;
@@ -14,7 +15,10 @@ class ProductController extends Component
 {
     use WithFileUploads,WithPagination;
 
-    public $name, $barcode, $cost ,$price, $stock, $alerts, $categoryid, $search, $image, $selected_id, $pageTitle, $componentName;
+    public $name, $barcode, $cost ,$price, $stock, $alerts,$mark,$model,
+        $categoryid,$search, $image, $selected_id, $pageTitle, $componentName,
+        $subcategoryid;
+    
     private $pagination = 5;
     protected $paginationTheme = 'bootstrap'; 
 
@@ -28,7 +32,8 @@ class ProductController extends Component
     {
         if (Str::length($this->search) > 0) 
             $data = Product::join('categories as c','c.id','products.category_id')
-                             ->select('products.*','c.name as category')
+                             ->leftJoin('sub_categories as sc','sc.id','products.subcategory_id')
+                             ->select('products.*','c.name as category','sc.name as subcategory')
                              ->where('products.name','like','%' .$this->search . '%')
                              ->orWhere('products.barcode','like','%' .$this->search . '%')
                              ->orWhere('c.name','like','%' .$this->search . '%')
@@ -36,13 +41,15 @@ class ProductController extends Component
                              ->paginate($this->pagination);
         else
             $data = Product::join('categories as c','c.id','products.category_id')
-                            ->select('products.*','c.name as category')
+                            ->leftJoin('sub_categories as sc','sc.id','products.subcategory_id')
+                            ->select('products.*','c.name as category','sc.name as subcategory')
                             ->orderBy('products.name','asc')
                             ->paginate($this->pagination);
 
         return view('livewire.products.index',[
             'products' => $data,
-            'categories' => Category::orderBy('name','asc')->get()
+            'categories' => Category::orderBy('name','asc')->get(),
+            'subcategories' => SubCategory::orderBy('name','asc')->get()
         ])
         ->extends('layouts.theme.app')
         ->section('content');
@@ -78,7 +85,8 @@ class ProductController extends Component
             //'barcode' => $this->barcode,
             'stock' => $this->stock,
             'alerts' => $this->alerts,
-            'category_id' => $this->categoryid
+            'category_id' => $this->categoryid,
+            'subcategory_id' => $this->subcategoryid
         ]);
 
         $customFileName;
@@ -99,12 +107,15 @@ class ProductController extends Component
     public function Edit(Product $product){
         $this->selected_id = $product->id;
         $this->name = $product->name;
+        $this->mark = $product->mark;
+        $this->model = $product->model;
         $this->barcode = $product->barcode;
         $this->cost = $product->cost;
         $this->price = $product->price;
         $this->stock = $product->stock;
         $this->alerts = $product->alerts;
         $this->categoryid = $product->category_id;
+        $this->subcategoryid = $product->subcategory_id;
         $this->image = null;
 
         $this->emit('show-modal', 'show modal!');
@@ -137,12 +148,15 @@ class ProductController extends Component
 
         $product->update([
             'name' => $this->name,
+            'mark' => $this->mark,
+            'model' => $this->model,
             'cost' => $this->cost,
             'price' => $this->price,
             'barcode' => $this->barcode,
             'stock' => $this->stock,
             'alerts' => $this->alerts,
-            'category_id' => $this->categoryid
+            'category_id' => $this->categoryid,
+            'subcategory_id' => $this->subcategoryid
         ]);
 
         $customFileName;
@@ -160,11 +174,13 @@ class ProductController extends Component
             }
         }
         $this->resetUI();
-        $this->emit('product-added','Producto Registrado');
+        $this->emit('product-added','Producto Actualizado');
     }
 
     public function resetUI(){
         $this->name = '';
+        $this->mark = '';
+        $this->model = '';
         $this->cost = '';
         $this->price = '';
         $this->barcode = '';
@@ -173,6 +189,7 @@ class ProductController extends Component
         $this->image = null;
         $this->search = '';
         $this->categoryid = 'Elegir';
+        $this->subcategoryid = null;
         $this->selected_id = 0;
     }
 

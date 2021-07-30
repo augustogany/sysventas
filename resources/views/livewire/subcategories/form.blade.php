@@ -1,5 +1,19 @@
 @include('common.modalHeader')
 <div class="row">
+    <div class="col-sm-12 col-md-12 mt-2">
+        <div class="form-group">
+            <label>Categoria</label>
+            <select wire:model="categoryid" class="form-control">
+                <option value="Elegir" disabled>Elegir</option>
+                @foreach ($categories as $category)
+                    <option value="{{$category->id}}">{{$category->name}}</option>
+                @endforeach
+            </select>
+            @error('categoryid')
+                <span class="text-danger er">{{ $message}}</span>
+            @enderror
+        </div>
+    </div>
     <div class="col-sm-12">
         <div class="input-group">
             <div class="input-group-prepend">
@@ -7,7 +21,7 @@
                     <span class="fas fa-edit"></span>
                 </span>
             </div>
-            <input type="text" wire:model.lazy="name" class="form-control" placeholder="ej: fundas">
+            <input type="text" wire:model.lazy="name" class="form-control" placeholder="ej: cargador para autos">
         </div>
         @error('name')
             <span class="text-danger er">{{ $message }}</span>

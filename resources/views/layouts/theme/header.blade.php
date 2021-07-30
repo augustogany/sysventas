@@ -4,7 +4,7 @@
             <li class="nav-item theme-logo">
                 <a href="index.html">
                     <img src="assets/img/liveware.png" class="navbar-logo" alt="logo">
-                    <b style="font-size: 19px; color:#3B3F5C">LWPOS</b>
+                    <b style="font-size: 19px; color:#3B3F5C">{{env('APP_NAME','LARAVEL')}}</b>
                 </a>
             </li>
         </ul>

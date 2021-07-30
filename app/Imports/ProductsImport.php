@@ -2,11 +2,13 @@
 
 namespace App\Imports;
 
-use App\Product;
+use App\Models\Product;
 use Maatwebsite\Excel\Concerns\{Importable, ToModel, WithHeadingRow, WithValidation};
 
-class ProductsImport implements ToModel, WithHeadingRow, WithValidation
+class ProductsImport implements ToModel
 {
+    use Importable;
+
     /**
     * @param array $row
     *
@@ -15,13 +17,12 @@ class ProductsImport implements ToModel, WithHeadingRow, WithValidation
     public function model(array $row)
     {
         return new Product([
-            'name' => $row['name'],
-            'barcode' => $row['barcode'],
-            'cost' => $row['cost'],
-            'price' => $row['price'],
-            'stock' => $row['stock'],
-            'alerts' => $row['alerts'],
-            'category_id' => $row['category_id'],
+            'name' => $row[0],
+            'mark' => $row[1],
+            'model' => $row[2],
+            'cost' => $row[3],
+            'stock' => 0,
+            'category_id' => 1,
         ]);
     }
 }
