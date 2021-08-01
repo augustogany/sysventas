@@ -5,7 +5,7 @@ namespace App\Imports;
 use App\Models\Product;
 use Maatwebsite\Excel\Concerns\{Importable, ToModel, WithHeadingRow, WithValidation};
 
-class ProductsImport implements ToModel
+class ProductsImport implements ToModel,WithHeadingRow
 {
     use Importable;
 
@@ -16,13 +16,14 @@ class ProductsImport implements ToModel
     */
     public function model(array $row)
     {
-        return new Product([
-            'name' => $row[0],
-            'mark' => $row[1],
-            'model' => $row[2],
-            'cost' => $row[3],
+         $product = Product::create([
+            'name' => $row['name'],
+            'model' => $row['model'],
             'stock' => 0,
             'category_id' => 1,
         ]);
+        $product->barcode = date('Ymd').str_pad($product->id, 5, "0", STR_PAD_LEFT);
+        $product->save();
+        return $product;
     }
 }

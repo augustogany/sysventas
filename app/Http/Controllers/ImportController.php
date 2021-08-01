@@ -9,7 +9,7 @@ class ImportController extends Controller
 {
     public function import()
     {
-        (new ProductsImport)->import('products.xlsx');
+        (new ProductsImport)->import('products.csv');
         
         return redirect('/')->with('success', 'File imported successfully!');
     }

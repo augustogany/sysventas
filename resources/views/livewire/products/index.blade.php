@@ -11,6 +11,16 @@
                             Agregar
                         </a>
                     </li>
+                    <li>
+                        <a href="{{route('printBarcode',json_encode($selected))}}" class="tabmenu bg-dark" target="_blank">
+                            Print Code
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('printBarcodeAll') }}" class="tabmenu bg-dark" target="_blank">
+                            Print All
+                        </a>
+                    </li>
                 </ul>
             </div>
             @include('common.searchbox')
@@ -19,6 +29,7 @@
                     <table class="table table-bordered striped mt-1">
                         <thead class="text-white" style="background: #3B3F5C">
                             <tr>
+                                <th></th>
                                 <th class="table-th text-white">DESCRIPCION</th>
                                 <th class="table-th text-white text-center">BARCODE</th>
                                 <th class="table-th text-white text-center">CATEGORIA</th>
@@ -30,8 +41,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($products as $product)
+                            @forelse ($products as $key => $product)
                                 <tr>
+                                    <td class="text-center">
+                                        <div class="n-check">
+                                            <label class="new-control new-checkbox checkbox-primary">
+                                                <input type="checkbox"
+                                                wire:change="Addproducttoprintcode($('#p'+{{$product->id}}).is(':checked'),'{{$product->barcode}}')"
+                                                id="p{{$product->id}}"
+                                                value="{{$product->id}}"
+                                                class="new-control-input"
+                                                >
+                                                <span class="new-control-indicator"></span>
+                                                <h6></h6>
+                                            </label>
+                                        </div>
+                                    </td>
                                     <td><h6 class="text-left">{{$product->name}}</h6></td>
                                     <td><h6 class="text-center">{{$product->barcode}}</h6></td>
                                     <td><h6 class="text-center">{{$product->category}}</h6></td>
@@ -78,14 +103,16 @@
         
         window.livewire.on('product-added', msg => {
             $('#theModal').modal('hide')
+            noty(msg)
         });
 
         window.livewire.on('product-updated', msg => {
             $('#theModal').modal('hide')
+            noty(msg)
         });
 
         window.livewire.on('product-deleted', msg => {
-            //noty
+            noty(msg)
         });
 
         window.livewire.on('show-modal', msg => {
@@ -94,6 +121,10 @@
 
         window.livewire.on('modal-hide', msg => {
             $('#theModal').modal('hide')
+        });
+
+        window.livewire.on('error-printbarcode', Msg => {
+            noty(Msg)
         });
 
         $('#theModal').on('hidden.bs.modal', function(e) {

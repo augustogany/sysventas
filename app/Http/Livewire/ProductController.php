@@ -10,6 +10,7 @@ use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use DB;
 
 class ProductController extends Component
 {
@@ -17,9 +18,9 @@ class ProductController extends Component
 
     public $name, $barcode, $cost ,$price, $stock, $alerts,$mark,$model,
         $categoryid,$search, $image, $selected_id, $pageTitle, $componentName,
-        $subcategoryid;
+        $subcategoryid, $selected=[];
     
-    private $pagination = 5;
+    private $pagination = 10;
     protected $paginationTheme = 'bootstrap'; 
 
     public function mount(){
@@ -212,5 +213,17 @@ class ProductController extends Component
 
         $this->resetUI();
         $this->emit('product-deleted','Producto Eliminado');
+    }
+
+    public function Addproducttoprintcode($state,$id){
+        if ($state) {
+            array_push($this->selected,$id);
+        }else{
+            foreach ($this->selected as $key => $value) {
+                if ($value == $id) {
+                    unset($this->selected[$key]);
+                }
+            }
+        }
     }
 }

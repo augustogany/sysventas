@@ -10,12 +10,7 @@
 
     <title>Imprimir códigos de barras</title>
 
-    <?php $admin_favicon = Voyager::setting('admin.icon_image', ''); ?>
-    @if($admin_favicon == '')
-        <link rel="shortcut icon" href="{{ voyager_asset('images/logo-icon.png') }}" type="image/png">
-    @else
-        <link rel="shortcut icon" href="{{ Voyager::image($admin_favicon) }}" type="image/png">
-    @endif
+    <link rel="shortcut icon" href="{{ asset('assets/img/livewire_logo.png') }}" type="image/png">
   </head>
   <body>
         <div class="row">
@@ -23,8 +18,8 @@
                 @foreach ($products as $item)
                 @php
                     echo '  <div class="col-md-4 text-center" style="margin:5px 0px; margin-bottom:10px">
-                                <img src="data:image/png;base64,' . DNS1D::getBarcodePNG($item->barcode, "C39+", 2, 100) . '" width="100%" alt="barcode"   />
-                                <span>'.$item->codigo.'</span>
+                                <img src="data:image/png;base64,' . DNS1D::getBarcodePNG($item, "C39+", 2, 100) . '" width="100%" alt="barcode"   />
+                                <span>'.$item.'</span>
                             </div>';
                 @endphp
                 @endforeach
@@ -40,9 +35,9 @@
     <script>
         $(document).ready(function(){
             window.print();
-            setTimeout(() => {
-                window.close()
-            }, 10000);
+            // setTimeout(() => {
+            //     window.close()
+            // }, 10000);
         });
     </script>
   </body>
