@@ -8,7 +8,7 @@
                             <thead class="text-withe" style="background: #3B3F5C">
                                 <tr>
                                     <th width="10%"></th>
-                                    <th class="table-th text-left text-withe">DESCRIPCION</th>
+                                    <th class="table-th text-center text-withe">DESCRIPCION</th>
                                     <th class="table-th text-center text-withe">PRECIO</th>
                                     <th width="13%" class="table-th text-center text-withe">CANT</th>
                                     <th class="table-th text-center text-withe">IMPORTE</th>
@@ -30,8 +30,21 @@
                                                 </span>
                                             @endif
                                         </td>
-                                        <td><h6>{{$item->name}}</h6></td>
-                                        <td class="text-center">Bs{{number_format($item->price,2)}}</td>
+                                        <td class="text-center">
+                                            <div class="n-check" style="padding-left: 10%">
+                                                <label class="new-control new-checkbox checkbox-primary">
+                                                    <input type="checkbox"
+                                                    wire:change="xMayor($('#p'+{{$item->id}}).is(':checked'),$('#p' + {{$item->id}}).val())"
+                                                    id="p{{$item->id}}"
+                                                    value="{{$item->id}}"
+                                                    class="new-control-input"
+                                                    >
+                                                    <span class="new-control-indicator"></span>
+                                                    <h6>{{substr($item->attributes[1],'-3').' '.$item->name}}</h6>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td class="text-center"><h6>Bs{{number_format($item->price,2)}}</h6></td>
                                         <td>
                                             <input 
                                             type="number" 

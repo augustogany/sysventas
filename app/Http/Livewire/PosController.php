@@ -16,7 +16,7 @@ use Exception;
 class PosController extends Component
 {
     public $total, $itemsQuantity,$efectivo,$change,$typedocument_id,
-           $contact_id, $nit;
+           $contact_id, $nit,$xmayor;
 
     // propiedades para la creacion del customer if not exists
     public $name, $lastName, $fullName, $custom_typedocument, $custom_nit, $custom_phone,
@@ -25,6 +25,7 @@ class PosController extends Component
     public function mount(){
         $this->efectivo = 0;
         $this->change = 0;
+        $this->xmayor = 1;
         $this->total = Cart::getTotal();
         $this->itemsQuantity = Cart::getTotalQuantity();
 
@@ -63,16 +64,17 @@ class PosController extends Component
         if ($product == null || empty($product)) {
             $this->emit('scan-notfound','El producto no esta registrado');
         }else{
-            if ($this->InCart($product->id)) {
-                $this->increaseQty($product->id);
-                return;
-            }
             if ($product->stock < 1) {
                 $this->emit('no-stock','Stock insuficiente :(');
                 return;
             }
-
-            Cart::add($product->id, $product->name,$product->price, $cant, $product->image);
+            if ($this->InCart($product->id)) {
+                $this->increaseQty($product->id);
+                return;
+            }
+            
+            Cart::add($product->id, $product->name,$product->price, $cant, [$product->image,$product->barcode]);
+            //dd(Cart::getContent());
             $this->total = Cart::getTotal();
             $this->itemsQuantity = Cart::getTotalQuantity();
 
@@ -84,8 +86,25 @@ class PosController extends Component
         $exist = Cart::get($productid);
         return $exist ? true : false;
     }
+    
+    public function increaseQty($productId,$cant = 0){
+        $title = 'Cantidad actualizada';
+        $product = Product::findOrFail($productId);
+        $exist = Cart::get($productId);
+        
+        if ($product->stock < ($cant + $exist->quantity)) {
+            $this->emit('no-stock', 'Stock insuficiente :(');
+            return;
+        }
+        $cant ++;
+        Cart::update($exist->id,array('quantity' => $cant));
+        //Cart::update($exist->id,tarray($product->id,$product->name, $product->price, $cant, $product->image));
+        $this->total = Cart::getTotal();
+        $this->itemsQuantity = Cart::getTotalQuantity();
+        $this->emit('scan-ok', $title);
+    }
 
-    public function increaseQty($productId,$cant = 1){
+    public function increaseQtyorg($productId,$cant = 1){
         $title = '';
         $product = Product::findOrFail($productId);
         $exist = Cart::get($productId);
@@ -102,7 +121,7 @@ class PosController extends Component
                 return;
             }
         }
-        Cart::add($product->id, $product->name, $product->price, $cant, $product->image);
+        Cart::add($product->id,$product->name, $product->price, $cant, $product->image);
         $this->total = Cart::getTotal();
         $this->itemsQuantity = Cart::getTotalQuantity();
         $this->emit('scan-ok', $title);
@@ -124,9 +143,40 @@ class PosController extends Component
             }
         }
        
+        if ($cant > 0) {
+            Cart::update($exist->id, array(
+                    'quantity' => array(
+                        'relative' => false,
+                        'value' => $cant
+                    ),
+            ));
+            $this->total = Cart::getTotal();
+            $this->itemsQuantity = Cart::getTotalQuantity();
+            $this->emit('scan-ok', $title);
+        }else{
+            $this->removeItem($productId);
+        }
+    }
+
+    public function updateQtyorg($productId, $cant = 1){
+        $product = Product::findOrFail($productId);
+        $exist = Cart::get($productId);
+
+        if ($exist) {
+            $title = 'Cantidad actualizada';
+        } else {
+            $title = 'Producto agregado';
+        }
+        if ($exist) {
+            if ($product->stock < $cant ) {
+                $this->emit('no-stock', 'Stock insuficiente :(');
+                return;
+            }
+        }
+       
         $this->removeItem($productId);
         if ($cant > 0) {
-            Cart::add($product->id, $product->name, $product->price, $cant, $product->image);
+            Cart::add($product->id,$product->name, $product->price, $cant, $product->image);
             $this->total = Cart::getTotal();
             $this->itemsQuantity = Cart::getTotalQuantity();
             $this->emit('scan-ok', $title);
@@ -141,21 +191,44 @@ class PosController extends Component
     }
 
     public function decreaseQty($productId){
+
         $item = Cart::get($productId);
-        Cart::remove($productId);
-        $newQty = ($item->quantity) -1;
-        if ($newQty > 0)
-            Cart::add($item->id, $item->name, $item->price, $newQty, $item->attributes[0] );
+       
+        if ($item->quantity <= 1){ 
+            $this->removeItem($productId);
+            return;
+        }
+        Cart::update($item->id,array('quantity' => -1));
         
-        $this->total= Cart::getTotal();
-        $this->itemsQuantity = Cart::getTotalQuantity();
-        $this->emit('scan-ok', 'Cantidad actualizada');
+        $this->total = Cart::getTotal();
+        $this->ItemsQuantity = Cart::getTotalQuantity();
+     
+        $this->emit('scan-ok', 'Cantidad Actualizada');
+    }
+
+    public function decreaseQtyorg($productId){
+
+        $item = Cart::get($productId);
+
+        Cart::remove($productId);
+
+        $newQty=($item->quantity)-1;
+
+        if($newQty > 0)
+        
+            Cart::add($item->id,$item->name, $item->price, $newQty, $item->attributes[0]);
+        
+        $this->total = Cart::getTotal();
+        $this->ItemsQuantity = Cart::getTotalQuantity();
+     
+        $this->emit('scan-ok', 'Cantidad Actualizada');
     }
 
     public function clearCart(){
         Cart::clear();
         $this->efectivo = 0;
         $this->change = 0;
+        $this->xmayor = false;
         $this->total= Cart::getTotal();
         $this->itemsQuantity = Cart::getTotalQuantity();
         $this->emit('scan-ok', 'Carrito vacio');
@@ -206,6 +279,7 @@ class PosController extends Component
             Cart::clear();
             $this->efectivo = 0;
             $this->change = 0;
+            $this->xmayor = false;
             $this->total= Cart::getTotal();
             $this->itemsQuantity = Cart::getTotalQuantity();
             $this->emit('sale-ok', 'Venta Registrada con exito');
@@ -260,5 +334,29 @@ class PosController extends Component
 
     public function printTicket($sale){
          return Redirect::to("print://$sale->id");
+    }
+
+    public function xMayor($state,$id){
+       
+        if ($state) {
+            $product = Product::findOrFail($id);
+            
+            Cart::update($id, array(
+                'price' => $product->price2, // new item price, price can also be a string format like so: '98.67'
+              ));
+            $this->total = Cart::getTotal();
+            $this->itemsQuantity = Cart::getTotalQuantity();
+            $this->emit('scan-ok', 'Precio Actualizado');
+            
+        }else{
+            $product = Product::findOrFail($id);
+
+            Cart::update($id, array(
+                'price' => $product->price, // new item price, price can also be a string format like so: '98.67'
+              ));
+            $this->total = Cart::getTotal();
+            $this->itemsQuantity = Cart::getTotalQuantity();
+            $this->emit('scan-ok', 'Precio Actualizado');
+        }
     }
 }

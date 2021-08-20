@@ -21,6 +21,7 @@ class CreateProductsTable extends Migration
             $table->string('model',25)->nullable();
             $table->decimal('cost',10,2)->nullable()->default(0);
             $table->decimal('price',10,2)->nullable()->default(0);
+            $table->decimal('price2',10,2)->nullable()->default(0);
             $table->integer('stock');
             $table->integer('alerts')
                   ->nullable()

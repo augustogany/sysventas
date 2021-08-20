@@ -16,7 +16,7 @@ class ProductController extends Component
 {
     use WithFileUploads,WithPagination;
 
-    public $name, $barcode, $cost ,$price, $stock, $alerts,$mark,$model,
+    public $name, $barcode ,$cost ,$price, $price2 ,$stock, $alerts,$mark,$model,
         $categoryid,$search, $image, $selected_id, $pageTitle, $componentName,
         $subcategoryid, $selected=[];
     
@@ -83,6 +83,8 @@ class ProductController extends Component
             'name' => $this->name,
             'cost' => $this->cost,
             'price' => $this->price,
+            'price2' => $this->price2,
+            'model' => $this->model,
             //'barcode' => $this->barcode,
             'stock' => $this->stock,
             'alerts' => $this->alerts,
@@ -113,6 +115,7 @@ class ProductController extends Component
         $this->barcode = $product->barcode;
         $this->cost = $product->cost;
         $this->price = $product->price;
+        $this->price2 = $product->price2;
         $this->stock = $product->stock;
         $this->alerts = $product->alerts;
         $this->categoryid = $product->category_id;
@@ -124,7 +127,7 @@ class ProductController extends Component
 
     public function Update(){
         $rules= [
-            'name' => "required|min:3|unique:products,name,{$this->selected_id}",
+            'name' => 'required|min:3',
             'cost' => 'required',
             'price' => 'required',
             'stock' => 'required',
@@ -134,7 +137,6 @@ class ProductController extends Component
 
         $messages = [
             'name.required' => 'El nombre del producto es requerido',
-            'name.unique' => 'Ya existe un producto con ese nombre',
             'name.min' => 'El nombre deve tener al menos 3 caracteres',
             'cost.required' => 'El costo es requerido',
             'price.required' => 'El precio es requerido',
@@ -153,6 +155,7 @@ class ProductController extends Component
             'model' => $this->model,
             'cost' => $this->cost,
             'price' => $this->price,
+            'price2' => $this->price2,
             'barcode' => $this->barcode,
             'stock' => $this->stock,
             'alerts' => $this->alerts,

@@ -32,6 +32,7 @@
                                 <th></th>
                                 <th class="table-th text-white">DESCRIPCION</th>
                                 <th class="table-th text-white text-center">BARCODE</th>
+                                <th class="table-th text-white text-center">MODELO</th>
                                 <th class="table-th text-white text-center">CATEGORIA</th>
                                 <th class="table-th text-white text-center">PRECIO</th>
                                 <th class="table-th text-white text-center">STOCK</th>
@@ -59,6 +60,7 @@
                                     </td>
                                     <td><h6 class="text-left">{{$product->name}}</h6></td>
                                     <td><h6 class="text-center">{{$product->barcode}}</h6></td>
+                                    <td><h6 class="text-center">{{$product->model}}</h6></td>
                                     <td><h6 class="text-center">{{$product->category}}</h6></td>
                                     <td><h6 class="text-center">{{$product->price}}</h6></td>
                                     <td><h6 class="text-center">{{$product->stock}}</h6></td>

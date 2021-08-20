@@ -8,7 +8,7 @@ use App\Models\Product;
 
 class BarcodeController extends Controller
 {
-    public function printbarcode($data){
+    public function printbarcode($data=[]){
        $cantidad = 1;
        $codes = collect(json_decode($data));
        return view('pdf.barcode',[

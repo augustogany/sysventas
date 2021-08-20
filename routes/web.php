@@ -67,7 +67,7 @@ Route::get('reporte/excel/{user}/{type}',[ExportController::class,'reportExcel']
 Route::get('/import', [ImportController::class,'import']);
 
 //Barcode
-Route::get('/printfbarcode/{array}', [BarcodeController::class,'printbarcode'])
+Route::get('/printfbarcode/{array?}', [BarcodeController::class,'printbarcode'])
        ->name('printBarcode');
 Route::get('/printcodeall',[BarcodeController::class,'printallcodes'])->name('printBarcodeAll');
 Route::get('/barcode', [BarcodeController::class,'pdf']);

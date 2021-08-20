@@ -19,7 +19,10 @@ class ProductsImport implements ToModel,WithHeadingRow
          $product = Product::create([
             'name' => $row['name'],
             'model' => $row['model'],
-            'stock' => 0,
+            'stock' => $row['stock'],
+            'price' => 3,
+            'price2' => 3.3,
+            'image' => 'unavailable.png',
             'category_id' => 1,
         ]);
         $product->barcode = date('Ymd').str_pad($product->id, 5, "0", STR_PAD_LEFT);

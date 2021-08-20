@@ -11,9 +11,9 @@
     </div>
     <div class="col-sm-12 col-md-4">
         <div class="form-group">
-            <label>Codigo Barras</label>
-            <input type="text" wire:model.lazy="barcode" class="form-control" placeholder="Ej: 0032555">
-            @error('barcode')
+            <label>Modelo</label>
+            <input type="text" wire:model.lazy="model" class="form-control" placeholder="Ej: win">
+            @error('model')
                 <span class="text-danger er">{{ $message}}</span>
             @enderror
         </div>
@@ -27,7 +27,7 @@
             @enderror
         </div>
     </div>
-    <div class="col-sm-12 col-md-3">
+    <div class="col-sm-12 col-md-2">
         <div class="form-group">
             <label>Precio</label>
             <input type="text" data-type="currency" wire:model.lazy="price" class="form-control" placeholder="Ej: 0.00">
@@ -36,7 +36,16 @@
             @enderror
         </div>
     </div>
-    <div class="col-sm-12 col-md-3">
+    <div class="col-sm-12 col-md-2">
+        <div class="form-group">
+            <label>Precio/Mayor</label>
+            <input type="text" data-type="currency" wire:model.lazy="price2" class="form-control" placeholder="Ej: 0.00">
+            @error('price2')
+                <span class="text-danger er">{{ $message}}</span>
+            @enderror
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-2">
         <div class="form-group">
             <label>Stock</label>
             <input type="number" wire:model.lazy="stock" class="form-control" placeholder="Ej: 0">
